@@ -1,0 +1,16 @@
+<routes>
+  <vType accel=".1" decel=".2" id="RoadBlock" length="2.0" maxSpeed="5.0" sigma="1.5" />
+  <vType accel=".1" decel=".2" id="Human" length="2.0" maxSpeed="2.0" sigma="1.5" />
+  <vType accel=".1" decel=".2" id="Tesla" length="2.0" maxSpeed="5.0" sigma="1" color="red" />
+  <vType accel=".1" decel=".2" id="BMW" length="2.0" maxSpeed="5.0" sigma="1" color="1,1,1" />
+  <vType accel=".1" decel=".2" id="Audi" length="2.0" maxSpeed="5.0" sigma="1.25" color=".3,.3,1" />
+  <vType accel=".1" decel=".2" id="Volvo" length="2.0" maxSpeed="5.0" sigma=".75" color=".5,.5,.5" />
+
+  <route id="route0" edges="1to2 out"/>
+
+  <vehicle depart="10" departLane="0" id="0_roadBlock" route="route0" type="Human" />
+  <vehicle depart="10" departLane="1" id="1_roadBlock" route="route0" type="Tesla" />
+  <vehicle depart="10" departLane="2" id="2_roadBlock" route="route0" type="Volvo" />
+  <vehicle depart="10" departLane="3" id="3_roadBlock" route="route0" type="Volvo" />
+ 
+</routes>

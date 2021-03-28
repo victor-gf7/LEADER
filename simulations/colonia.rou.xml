@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on Wed Jul 29 20:57:07 2020 by SUMO duarouter Version 0.32.0
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
+
+    <input>
+        <net-file value="colonia.net.xml"/>
+        <route-files value="trips.trips.xml"/>
+    </input>
+
+    <output>
+        <output-file value="colonia.rou.xml"/>
+        <alternatives-output value="colonia.rou.alt.xml"/>
+    </output>
+
+    <processing>
+        <ignore-errors value="true"/>
+    </processing>
+
+    <time>
+        <begin value="0"/>
+        <end value="30.0"/>
+    </time>
+
+    <report>
+        <no-warnings value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <vehicle id="0" depart="0.00">
+        <route edges="155723705#0 155723705#1 155723658#2 155723658#3 155723658#4 155723658#5 22891257#1 22891257#2 22891257#3 535517208#0"/>
+    </vehicle>
+    <vehicle id="2" depart="2.00">
+        <route edges="155723658#1 155723658#2 155723642"/>
+    </vehicle>
+    <vehicle id="4" depart="4.00">
+        <route edges="155723658#0 155723655 557154758 557154757#0"/>
+    </vehicle>
+    <vehicle id="5" depart="5.00">
+        <route edges="155723658#1 155723658#2 155723658#3 155723658#4 155723658#5 22891257#1 22891257#2 22891257#3 535517207"/>
+    </vehicle>
+    <vehicle id="6" depart="6.00">
+        <route edges="-22891257#3 22891257#3 535517208#0 535517208#1 155723705#1 155723658#2 155723658#3 22959910"/>
+    </vehicle>
+    <vehicle id="10" depart="10.00">
+        <route edges="155723705#0 155723705#1 155723658#2 155723658#3 155723658#4 155723658#5 22891257#1 22891257#2 22891257#3 535517208#0"/>
+    </vehicle>
+    <vehicle id="11" depart="11.00">
+        <route edges="155723658#4 155723658#5 22891257#1 22891257#2 22891257#3 535517208#0 535517208#1 535517208#2"/>
+    </vehicle>
+    <vehicle id="12" depart="12.00">
+        <route edges="51037479 535517208#0"/>
+    </vehicle>
+    <vehicle id="13" depart="13.00">
+        <route edges="-22891257#3 22891257#3 535517208#0 535517208#1 155723705#1 155723658#2 155723642"/>
+    </vehicle>
+    <vehicle id="14" depart="14.00">
+        <route edges="535517208#0 535517208#1 155723705#1 155723658#2 155723658#3 155723658#4 155723658#5 22891257#1 22891257#2 22891257#3 535517207"/>
+    </vehicle>
+    <vehicle id="15" depart="15.00">
+        <route edges="155723705#0 535517208#2 557154758"/>
+    </vehicle>
+    <vehicle id="18" depart="18.00">
+        <route edges="155723705#0 155723705#1 155723658#2 155723658#3 155723658#4 155723658#5 22891257#1 22891257#2 22891257#3"/>
+    </vehicle>
+    <vehicle id="19" depart="19.00">
+        <route edges="22959910 535517208#1 155723705#1 155723658#2 155723658#3 155723658#4 155723658#5 52350060"/>
+    </vehicle>
+    <vehicle id="20" depart="20.00">
+        <route edges="155723705#1 155723658#2 155723658#3 155723658#4 155723658#5 52350060"/>
+    </vehicle>
+    <vehicle id="21" depart="21.00">
+        <route edges="-22891257#2 22891257#2 22891257#3 535517208#0 535517208#1 155723705#1"/>
+    </vehicle>
+    <vehicle id="22" depart="22.00">
+        <route edges="155723658#4 155723658#5 22891257#1 22891257#2"/>
+    </vehicle>
+    <vehicle id="23" depart="23.00">
+        <route edges="535517208#0 535517208#1 155723705#1 155723658#2 155723642"/>
+    </vehicle>
+    <vehicle id="24" depart="24.00">
+        <route edges="535517208#1 155723705#1"/>
+    </vehicle>
+    <vehicle id="25" depart="25.00">
+        <route edges="155723658#4"/>
+    </vehicle>
+    <vehicle id="26" depart="26.00">
+        <route edges="22959910"/>
+    </vehicle>
+    <vehicle id="27" depart="27.00">
+        <route edges="51037479 -22891257#3 22891257#3"/>
+    </vehicle>
+    <vehicle id="28" depart="28.00">
+        <route edges="22891257#3 -22891257#3 -22891257#2 22891257#2"/>
+    </vehicle>
+    <vehicle id="29" depart="29.00">
+        <route edges="22891257#0 22891257#1 22891257#2 22891257#3 535517208#0 535517208#1 155723705#1 155723658#2 155723658#3 155723658#4"/>
+    </vehicle>
+</routes>
