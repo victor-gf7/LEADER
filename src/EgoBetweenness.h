@@ -39,6 +39,7 @@ public:
     EgoBetweenness();
     virtual ~EgoBetweenness();
     virtual void loadMatrixTest(int **Matrix);
+    virtual int **MATRIXint( int r, int c);
     virtual void clearAdjMatrix(int **AdjMatrix);
     virtual void loadInitialAdjMatrix(int **Matrix, int dimension);
     virtual int getDimensionMatrix();

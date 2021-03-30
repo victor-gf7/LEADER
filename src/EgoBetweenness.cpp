@@ -110,27 +110,29 @@ void EgoBetweenness::printAdjMatrix(int **AdjMatrix){
     }
 }
 
+int **EgoBetweenness::MATRIXint(int r, int c){
+    int **m = (int **) malloc( r * sizeof (int *));
+    for (int i = 0; i < r; ++i)
+       m[i] = (int *) malloc( c * sizeof (int));
+    for (int i = 0; i < r; ++i)
+       for (int j = 0; j < c; ++j)
+          m[i][j] = 0;
+    return m;
+}
+
 // A*A = square
 // 1-A = subst
 // A*A[1-A]
 void EgoBetweenness::egoBetweenness(int **AdjMatrix){
 
-
-    std::cout << "Inicio da função" << endl;
-
-
     //memory = new AllocatingMemory();
 
-    int **subst = (int **)malloc(this->dimensionMatrix * this->dimensionMatrix * sizeof(int));
-    std::cout << "alocou o primeiro" << endl;
-
-    int **square = (int **)malloc(this->dimensionMatrix * this->dimensionMatrix * sizeof(int));
-    std::cout << "alocou o segundo" << endl;
+    int **subst = MATRIXint(this->dimensionMatrix, this->dimensionMatrix);
+    int **square = MATRIXint(this->dimensionMatrix, this->dimensionMatrix);
 
     double reciprocal = 0.0;
     int sum;
 
-    std::cout << "Inicio for 1-A" << endl;
     // 1-A
     for(int i = 0; i < this->dimensionMatrix; i++){
         for(int j = 0; j < this->dimensionMatrix; j++){
@@ -138,7 +140,6 @@ void EgoBetweenness::egoBetweenness(int **AdjMatrix){
         }
     }
 
-    std::cout << "Inicio for A*A" << endl;
     // A*A
     for(int i = 0; i < this->dimensionMatrix; i++){
         for(int j = 0; j < this->dimensionMatrix; j++){
