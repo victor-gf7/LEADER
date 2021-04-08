@@ -81,3 +81,12 @@ void Grafo::GRAPHshow( Graph G) {
       printf( "\n");
    }
 }
+
+void Grafo::clearAdjMatrix(Graph G){
+
+    for(int i = 0; i < G->V; i++){
+        for(int j = 0; j < G->V; j++){
+            G->adj[i][j] = 0;
+        }
+    }
+}

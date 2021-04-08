@@ -52,6 +52,8 @@ class BeaconMessage : public ::omnetpp::cPacket
     ::omnetpp::opp_string RoadSpeed;
     ::omnetpp::opp_string LimitCarsOnRoad;
     std::map<int,std::string> vizinhos;
+    std::pair<int, int**> matrixAdj;
+    bool dbscanExecutado;
 
   private:
     void copy(const BeaconMessage& other);
@@ -84,6 +86,10 @@ class BeaconMessage : public ::omnetpp::cPacket
     virtual void setLimitCarsOnRoad(const char * LimitCarsOnRoad);
     virtual void setVizinhos(std::map<int,std::string> vizinhos);
     virtual std::map<int,std::string> getVizinhos() const;
+    virtual void setMatrixAdj(std::pair<int, int**> matrixAdj);
+    virtual std::pair<int, int**> getMatrixAdj() const;
+    virtual void setDbscanExecutado(bool dbscanExecutado);
+    virtual bool getDbscanExecutado() const;
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const BeaconMessage& obj) {obj.parsimPack(b);}

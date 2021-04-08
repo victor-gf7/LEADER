@@ -34,6 +34,7 @@ OBJS = \
     $O/src/dbscan.o \
     $O/src/EgoBetweenness.o \
     $O/src/Grafo.o \
+    $O/src/Leader.o \
     $O/src/MyApplicaton.o \
     $O/src/MyRSUApp.o \
     $O/src/msg/BeaconMessage_m.o

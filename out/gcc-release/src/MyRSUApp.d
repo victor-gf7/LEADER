@@ -8,6 +8,7 @@ out/gcc-release//src/MyRSUApp.o: src/MyRSUApp.cpp src/MyRSUApp.h \
  ../veins-veins-4.7.1/src/veins/base/utils/Coord.h \
  ../veins-veins-4.7.1/src/veins/base/utils/FWMath.h \
  ../veins-veins-4.7.1/src/veins/modules/world/traci/trafficLight/TraCITrafficLightProgram.h \
+ src/dbscan.h src/EgoBetweenness.h src/Leader.h \
  ../veins-veins-4.7.1/src/veins/modules/application/ieee80211p/BaseWaveApplLayer.h \
  ../veins-veins-4.7.1/src/veins/base/modules/BaseApplLayer.h \
  ../veins-veins-4.7.1/src/veins/base/modules/BaseLayer.h \
@@ -61,6 +62,12 @@ src/msg/../dbscan.h:
 ../veins-veins-4.7.1/src/veins/base/utils/FWMath.h:
 
 ../veins-veins-4.7.1/src/veins/modules/world/traci/trafficLight/TraCITrafficLightProgram.h:
+
+src/dbscan.h:
+
+src/EgoBetweenness.h:
+
+src/Leader.h:
 
 ../veins-veins-4.7.1/src/veins/modules/application/ieee80211p/BaseWaveApplLayer.h:
 

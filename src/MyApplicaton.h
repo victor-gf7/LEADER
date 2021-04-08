@@ -39,10 +39,6 @@ namespace veins_manhattan {
                 MAKE_DBSCAN_EVT,
                 BEACON_MSG_EVT,
             };
-            enum electionMessages{
-                SEND_CADIDATE_EVT,
-                SEND_LIDER_EVT
-            };
             TraCIMobility* mobility;
             TraCICommandInterface* traci;
             TraCICommandInterface::Vehicle* traciVehicle;
@@ -55,37 +51,21 @@ namespace veins_manhattan {
             virtual void onBSM(BasicSafetyMessage* bsm);
             virtual void handlePositionUpdate(cObject* obj);
             virtual void handleSelfMsg(cMessage* msg);
+            virtual bool checkNeighbor(Coord pointCore, Coord pointTarget);
 
-            //VAR
-            int eventoEscalonado = 0;
-            bool eventoExecutado = false;
-            bool grafoCriado = false;
-            double windowTime;
-            double actualTime;
-            int sizeMap;
-            int iDBSCAN; //Apenas um iterador para o DBSCAN
-            //int matrizDeAdjacencia [][];
-            std::map<int,std::string> mapDBSCAN;
-            std::map<std::string,int> DBSCANmap;
-            std::map<int,std::string>::iterator itmapDBSCAN;
-            std::map<std::string,int>::iterator itDBSCANmap;
+
             string posString;
-            Point ponto;
+            Coord ponto;
+            Coord target;
             Graph graph;
             Grafo grafo;
             std::map<int, std::string> vizinhosList;
             std::map<int, std::string>::iterator itVizinhosList;
-            vector<Point_> points;
-            vector<Point_> pointsResult;
-            std::vector<std::string> positionByNode;
+
 
             //WRITE FILE
             ofstream outputFile;
 
-            //MSG
-            cMessage* sendCloudMSGEvt;
-            cMessage* msgClouEvt;
-            cMessage* makeDBSCANEvt;
 
             //inventando moda!
             virtual void writelogfile();

@@ -6,5 +6,5 @@ simple MyRSUApp extends BaseWaveApplLayer
 {
     @class(MyRSUApp);
     @display("i=block/app");
-
+    double windowTime = default(15.0);
 }

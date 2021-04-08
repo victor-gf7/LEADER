@@ -183,6 +183,7 @@ Register_Class(BeaconMessage)
 BeaconMessage::BeaconMessage(const char *name, short kind) : ::omnetpp::cPacket(name,kind)
 {
     this->idSender = 0;
+    this->dbscanExecutado = false;
 }
 
 BeaconMessage::BeaconMessage(const BeaconMessage& other) : ::omnetpp::cPacket(other)
@@ -211,6 +212,8 @@ void BeaconMessage::copy(const BeaconMessage& other)
     this->RoadSpeed = other.RoadSpeed;
     this->LimitCarsOnRoad = other.LimitCarsOnRoad;
     this->vizinhos = other.vizinhos;
+    this->matrixAdj = other.matrixAdj;
+    this->dbscanExecutado = other.dbscanExecutado;
 }
 
 void BeaconMessage::parsimPack(omnetpp::cCommBuffer *b) const
@@ -223,6 +226,8 @@ void BeaconMessage::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->RoadSpeed);
     doParsimPacking(b,this->LimitCarsOnRoad);
     doParsimPacking(b, this->vizinhos);
+    doParsimPacking(b, this->matrixAdj);
+    doParsimPacking(b, this->dbscanExecutado);
 }
 
 void BeaconMessage::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -235,6 +240,8 @@ void BeaconMessage::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->RoadSpeed);
     doParsimUnpacking(b,this->LimitCarsOnRoad);
     doParsimUnpacking(b, this->vizinhos);
+    doParsimUnpacking(b, this->matrixAdj);
+    doParsimUnpacking(b, this->dbscanExecutado);
 }
 
 int BeaconMessage::getIdSender() const
@@ -305,6 +312,24 @@ void BeaconMessage::setVizinhos(std::map<int,std::string> vizinhos)
 std::map<int,std::string> BeaconMessage::getVizinhos() const
 {
     return this->vizinhos;
+}
+
+void BeaconMessage::setMatrixAdj(std::pair<int, int**> matrixAdj){
+    this->matrixAdj = matrixAdj;
+}
+
+std::pair<int, int**> BeaconMessage::getMatrixAdj() const
+{
+    return this->matrixAdj;
+}
+
+void BeaconMessage::setDbscanExecutado(bool dbscanExecutado){
+    this->dbscanExecutado = dbscanExecutado;
+}
+
+bool BeaconMessage::getDbscanExecutado() const
+{
+    return this->dbscanExecutado;
 }
 
 class BeaconMessageDescriptor : public omnetpp::cClassDescriptor

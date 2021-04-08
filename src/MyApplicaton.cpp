@@ -89,14 +89,16 @@ void MyApplicaton::handleSelfMsg(cMessage* msg) {
 
         BeaconMessage* beaconMessage = new BeaconMessage("beacon");
 
+        grafo.GRAPHshow(graph);
+
         //Encapsula oObjetos em uma mensagem
         beaconMessage->setRoadSender(mobility->getRoadId().c_str());
         beaconMessage->setIdSender(myId);
         beaconMessage->setTypeDevice("CAR");
         if(!vizinhosList.empty()){
             beaconMessage->setVizinhos(vizinhosList);
-
         }
+        beaconMessage->setMatrixAdj(std::pair<int, int**>(myId, graph->adj));
 
         std::ostringstream strs;
         strs << mobility->getCurrentSpeed().length();
@@ -124,86 +126,9 @@ void MyApplicaton::handleSelfMsg(cMessage* msg) {
         sendDown(wsa);
         scheduleAt(simTime() + wsaInterval, sendWSAEvt);
         break;
-    }
-    case MAKE_DBSCAN_EVT: {
-
-        eventoExecutado = true;
-        std::cout << "O veiculo " << myId << "executou o DBSCAN" << endl;
-
-        if (mapDBSCAN.empty()) {
-            std::cout << "Map vazio! Não fazer DBSCAN" << endl;
-        } else {
-            if (!outputFile.is_open()) {
-                outputFile.open("DBSCAN_Data.txt");
-            }
-            //std::cout << "MAKE_DBSCAN_EVT \n" << simTime().dbl() << endl;
-            //outputFile << "MAKE_DBSCAN_EVT;" << simTime().dbl();
-            actualTime = simTime().dbl();
-            sizeMap = mapDBSCAN.size();
-            //SEPARAR OS PONTOS
-            iDBSCAN = 0;
-            for (itmapDBSCAN = mapDBSCAN.begin();
-                    itmapDBSCAN != mapDBSCAN.end(); ++itmapDBSCAN) {
-
-                positionByNode = BaseWaveApplLayer::split(itmapDBSCAN->second,
-                        ";");
-
-                std::cout << itmapDBSCAN->first << " => " << positionByNode[0]
-                        << "|" << positionByNode[1] << "|" << positionByNode[2]
-                        << endl;
-                ponto.x = std::stod(positionByNode[0]);
-                ponto.y = std::stod(positionByNode[1]);
-                ponto.z = std::stod(positionByNode[2]);
-                ponto.clusterID = UNCLASSIFIED;
-                points.insert(points.begin(), ponto);
-                //points[iDBSCAN] = ponto;
-                iDBSCAN++;
-            }
-            //Rodar o DBSCAN
-            DBSCAN ds(MINIMUM_POINTS, EPSILON_DBSCAN, points);
-            ds.run();
-            std::cout << "Inicio da instancia" << endl;
-            EgoBetweenness egoBetweenness;
-            std::cout << "Fim instancia, inicio load matriz" << egoBetweenness.getEgoBetweenness() << endl;
-            egoBetweenness.loadInitialAdjMatrix(graph->adj, 30);
-            std::cout << "fim load,inicio betweeness " << endl;
-            grafo.GRAPHshow(graph);
-            std::cout << "Vehicle: " << myId <<" Ego-Value: " << egoBetweenness.getEgoBetweenness() << endl;
-            std::cout << "Vehicle: " << myId <<" dimensão matriz: " << egoBetweenness.getDimensionMatrix() << endl;
-            std::cout << "Vehicle: " << myId <<" max ego-value: " << egoBetweenness.getMaxEgoBetweenness() << endl;
-            egoBetweenness.egoBetweenness(graph->adj);
-            std::cout << "Vehicle: " << myId <<" Ego-Value: " << egoBetweenness.getEgoBetweenness() << endl;
-            //MOSTRAR RESULTADOS
-            iDBSCAN = 0;
-            std::cout << "number of points: " << ds.getTotalPointSize() << endl;
-            //outputFile << ";" << ds.getTotalPointSize() << "\n";
-            pointsResult = ds.m_points;
-            while (iDBSCAN < ds.getTotalPointSize()) {
-                posString = std::to_string(pointsResult[iDBSCAN].x) + ";"
-                        + std::to_string(pointsResult[iDBSCAN].y) + ";"
-                        + std::to_string(pointsResult[iDBSCAN].z);
-                std::cout << "X: " << pointsResult[iDBSCAN].x << " Y: "
-                        << pointsResult[iDBSCAN].y << " Z: "
-                        << pointsResult[iDBSCAN].z << " Cluster ID: "
-                        << pointsResult[iDBSCAN].clusterID << " Node ID: "
-                        << DBSCANmap[posString] << endl;
-
-                outputFile << "X: " << pointsResult[iDBSCAN].x << ";" << "Y: "
-                        << pointsResult[iDBSCAN].y << ";" << "Z: "
-                        << pointsResult[iDBSCAN].z << ";" << "Cluster ID: "
-                        << pointsResult[iDBSCAN].clusterID << ";"
-                        << DBSCANmap[posString] << ";" << actualTime << "\n";
-                iDBSCAN++;
-            }
-        }
-
-        //outputFi1le << "END_MAKE_DBSCAN_EVT\n";
-        points.clear();
-        pointsResult.clear();
-        mapDBSCAN.clear();
-
-        scheduleAt(simTime().dbl() + windowTime, makeDBSCANEvt);
-
+    }case MAKE_DBSCAN_EVT: {
+        std::cout << "VAI DAR CERTO" << endl;
+        break;
     }
     default: {
         if (msg)
@@ -216,6 +141,21 @@ void MyApplicaton::handleSelfMsg(cMessage* msg) {
 
 void MyApplicaton::onWSM(WaveShortMessage* wsm) {
     std::cerr << "\n Chegou uma Wave Short Message em: onWSM";
+}
+
+/**
+ * verifica se os nos tem distancia suficiente para serem vizinhos
+ */
+bool MyApplicaton::checkNeighbor(Coord pointCore, Coord pointTarget){
+
+    double distance = pow(pointCore.x - pointTarget.x,2)+pow(pointCore.y - pointTarget.y,2)+pow(pointCore.z - pointTarget.z,2);
+
+    std::cout << "A distancia entre eles é: " << distance <<endl;
+    if(distance > 1.0 && distance <= 10000.0){
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -238,34 +178,34 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
                 + std::to_string(bsm->getSenderPos().z);
         //count =  std::to_string(BC->getSrcProcId());
         if ((std::string) BC->getTypeDevice() != "RSU") {
+            //preenchendo posições
+            target.x = bsm->getSenderPos().x;
+            target.y = bsm->getSenderPos().y;
 
-            grafo.GRAPHinsertArc(graph, myId, BC->getIdSender());
-            vizinhosList.insert(std::pair<int, std::string>(BC->getIdSender(), posString));
+            std::cout << "Calculando distancia entre "<< myId << " e " << BC->getIdSender() << endl;
+            if(checkNeighbor(curPosition, target)){
+                grafo.GRAPHinsertArc(graph, myId, BC->getIdSender());
+                vizinhosList.insert(std::pair<int, std::string>(BC->getIdSender(), posString));
 
-            std::map<int, std::string> vizinhosSenderList = BC->getVizinhos();
 
-            if(!BC->getVizinhos().empty()){
-                for(itVizinhosList = vizinhosSenderList.begin(); itVizinhosList != vizinhosSenderList.end(); ++itVizinhosList){
-                    grafo.GRAPHinsertArc(graph, BC->getIdSender(), itVizinhosList->first);
-               }
+                if(!BC->getVizinhos().empty()){
+                    std::map<int, std::string> vizinhosSenderList = BC->getVizinhos();
+
+                    for(itVizinhosList = vizinhosSenderList.begin(); itVizinhosList != vizinhosSenderList.end(); ++itVizinhosList){
+                         grafo.GRAPHinsertArc(graph, BC->getIdSender(), itVizinhosList->first);
+                    }
+                }
             }
-
-
-            mapDBSCAN.insert(
-                    std::pair<int, std::string>(BC->getIdSender(), posString));
-            DBSCANmap.insert(
-                    std::pair<std::string, int>(posString, BC->getIdSender()));
+        } else{
+            if(BC->getDbscanExecutado()){
+                std::cout << "DBSCAN já executado. Limpando matriz..." << endl;
+                grafo.clearAdjMatrix(graph);
+            }
         }
 
-        if (eventoEscalonado == 0) {
-            std::cout << "Escalonamento DBSCAN realizado pelo veiculo: " << myId
-                    << endl;
-            eventoEscalonado = 1;
-            makeDBSCANEvt = new cMessage("Make DBSCAN Event", MAKE_DBSCAN_EVT);
-            windowTime = par("windowTime").doubleValue();
-
-            scheduleAt(simTime().dbl() + windowTime, makeDBSCANEvt);
-        }
+        break;
+    }case MAKE_DBSCAN_EVT: {
+        std::cout << "VAI DAR CERTO" << endl;
         break;
     }
     default: {

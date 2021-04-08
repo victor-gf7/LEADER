@@ -47,7 +47,7 @@ public:
     virtual double getMaxEgoBetweenness();
     virtual void updateMatrix(int **Matrix, int **AdjMatrix);
     virtual void printMatrix(int **Matrix);
-    virtual void printAdjMatrix(int **AdjMatrix);
+    virtual void printAdjMatrix(int **AdjMatrix, int dimension);
     virtual void egoBetweenness(int **AdjMatrix);
 };
 

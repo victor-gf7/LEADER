@@ -22,6 +22,7 @@ EgoBetweenness::EgoBetweenness() {
     // each vehicle has an initial matrix of dimension equal to 30
     //AdjMatrix = (int **)malloc(30 * 30 * sizeof(int));
     //loadInitialAdjMatrix(AdjMatrix, 30);
+    this->dimensionMatrix = 30;
     this->ego = 0;
     this->maxEgo = 0;
 }
@@ -100,13 +101,13 @@ void EgoBetweenness::printMatrix(int **Matrix){
     }
 }
 
-void EgoBetweenness::printAdjMatrix(int **AdjMatrix){
+void EgoBetweenness::printAdjMatrix(int **AdjMatrix, int dimension){
 
-    for(int i = 0; i < this->dimensionMatrix; i++){
-        for(int j = 0; j < this->dimensionMatrix; j++){
-            std::cout << AdjMatrix[i][j] << " ";
+    for(int i = 0; i < dimension; i++){
+        for(int j = 0; j < dimension; j++){
+            printf( " %2d", AdjMatrix[i][j]);
         }
-        std::cout << std::endl;
+        printf( "\n");
     }
 }
 
@@ -133,12 +134,15 @@ void EgoBetweenness::egoBetweenness(int **AdjMatrix){
     double reciprocal = 0.0;
     int sum;
 
+
+
     // 1-A
     for(int i = 0; i < this->dimensionMatrix; i++){
         for(int j = 0; j < this->dimensionMatrix; j++){
             subst[i][j] = 1 - AdjMatrix[i][j];
         }
     }
+
 
     // A*A
     for(int i = 0; i < this->dimensionMatrix; i++){
@@ -150,16 +154,20 @@ void EgoBetweenness::egoBetweenness(int **AdjMatrix){
             square[i][j] = sum;
         }
     }
+//    printMatrix(subst);
+//    printf("\n");
+//    printMatrix(square);
 
-    std::cout << "Inicio for A*A[1-A]" << endl;
+
     // the egocentric betweenness is the sum of the reciprocal of the resulting non-zero elements
     for(int i = 0; i < this->dimensionMatrix; i++){
         for(int j = 0; j < this->dimensionMatrix; j++){
-            if(i < j && subst[i][j] != 0){
+            if(i < j && subst[i][j] != 0 && square[i][j] != 0){
                 reciprocal += (double(1.0)/double(square[i][j]));
             }
         }
     }
+
     this->ego = reciprocal;
     if(this->ego > this->maxEgo) this->maxEgo = this->ego;
 }

@@ -34,6 +34,7 @@ public:
     bool existeVizinho(int v1, int v2);
 
     /*Nova abordagem*/
+    void clearAdjMatrix(Graph G);
     Graph GRAPHinit( int V);
     int **MATRIXint( int r, int c, int val);
     void GRAPHinsertArc( Graph G, int v, int w);
