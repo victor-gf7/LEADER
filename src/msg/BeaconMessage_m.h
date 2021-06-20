@@ -11,6 +11,7 @@
 
 #include <omnetpp.h>
 #include "../dbscan.h"
+#include "../Leader.h"
 #include "veins/modules/mobility/traci/TraCICommandInterface.h"
 
 
@@ -53,6 +54,7 @@ class BeaconMessage : public ::omnetpp::cPacket
     ::omnetpp::opp_string LimitCarsOnRoad;
     std::map<int,std::string> vizinhos;
     std::pair<int, int**> matrixAdj;
+    std::map<int, LeaderInfo> lideres;//idveiculo, clusterid
     bool dbscanExecutado;
 
   private:
@@ -90,6 +92,8 @@ class BeaconMessage : public ::omnetpp::cPacket
     virtual std::pair<int, int**> getMatrixAdj() const;
     virtual void setDbscanExecutado(bool dbscanExecutado);
     virtual bool getDbscanExecutado() const;
+    virtual void setLideres(std::map<int, LeaderInfo> lideres);
+    virtual std::map<int, LeaderInfo> getLideres() const;
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const BeaconMessage& obj) {obj.parsimPack(b);}

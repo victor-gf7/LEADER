@@ -25,14 +25,13 @@ void MyApplicaton::initialize(int stage) {
         lastDroveAt = simTime();
         graph = grafo.GRAPHinit(30);
 
+        std::cout
+        << " \n ---------------------------------------- Código do Veículo =  "
+        << myId << endl;
 
         std::cout
-                << " \n ---------------------------------------- Código do Veículo =  "
-                << myId << endl;
-
-        std::cout
-                << " \n ---------------------------------------- Edge do Veículo   =  "
-                << traciVehicle->getRouteId() << "\n" << endl;
+        << " \n ---------------------------------------- Edge do Veículo   =  "
+        << traciVehicle->getRouteId() << "\n" << endl;
 
         string str = "car-added;id:" + std::to_string(myId);
         //in.SendMessage(str);
@@ -80,22 +79,23 @@ void MyApplicaton::handlePositionUpdate(cObject* obj) {
  */
 void MyApplicaton::handleSelfMsg(cMessage* msg) {
     std::cout << "Veiculo: " << myId << " -> Enviando Mensagen" << endl;
+    //std::cout << "TESTES: " << msg->getS << endl;
     switch (msg->getKind()) {
     case SEND_BEACON_EVT: {
-
         std::cout << "Tipo de Mensagem: BEACON" << endl;
         //Cria um objeto  BasicSafetyMessage
         BasicSafetyMessage* bsm = new BasicSafetyMessage();
 
         BeaconMessage* beaconMessage = new BeaconMessage("beacon");
 
-        grafo.GRAPHshow(graph);
+        //grafo.GRAPHshow(graph);
 
         //Encapsula oObjetos em uma mensagem
+        //std::cout << "X: " << traciVehicle->getLanePosition()-> << "Y:" << mobility->getCurrentPosition().y << endl;
         beaconMessage->setRoadSender(mobility->getRoadId().c_str());
         beaconMessage->setIdSender(myId);
         beaconMessage->setTypeDevice("CAR");
-        if(!vizinhosList.empty()){
+        if (!vizinhosList.empty()) {
             beaconMessage->setVizinhos(vizinhosList);
         }
         beaconMessage->setMatrixAdj(std::pair<int, int**>(myId, graph->adj));
@@ -126,14 +126,15 @@ void MyApplicaton::handleSelfMsg(cMessage* msg) {
         sendDown(wsa);
         scheduleAt(simTime() + wsaInterval, sendWSAEvt);
         break;
-    }case MAKE_DBSCAN_EVT: {
+    }
+    case MAKE_DBSCAN_EVT: {
         std::cout << "VAI DAR CERTO" << endl;
         break;
     }
     default: {
         if (msg)
             DBG_APP << "APP: Error: Got Self Message of unknown kind! Name: "
-                           << msg->getName() << endl;
+            << msg->getName() << endl;
         break;
     }
     }
@@ -146,12 +147,15 @@ void MyApplicaton::onWSM(WaveShortMessage* wsm) {
 /**
  * verifica se os nos tem distancia suficiente para serem vizinhos
  */
-bool MyApplicaton::checkNeighbor(Coord pointCore, Coord pointTarget){
+bool MyApplicaton::checkNeighbor(Coord pointCore, Coord pointTarget) {
 
-    double distance = pow(pointCore.x - pointTarget.x,2)+pow(pointCore.y - pointTarget.y,2)+pow(pointCore.z - pointTarget.z,2);
+    double distance = sqrt(
+            pow(pointCore.x - pointTarget.x, 2)
+            + pow(pointCore.y - pointTarget.y, 2)
+            + pow(pointCore.z - pointTarget.z, 2));
 
-    std::cout << "A distancia entre eles é: " << distance <<endl;
-    if(distance > 1.0 && distance <= 10000.0){
+    std::cout << "A distancia entre eles é: " << distance << endl;
+    if (distance > 1.0 && distance <= 70.0) {
         return true;
     }
 
@@ -168,7 +172,7 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
     BeaconMessage* BC = dynamic_cast<BeaconMessage*>(bsm->decapsulate());
 
     std::cout << BC->getTypeDevice() << " que enviou " << BC->getIdSender()
-            << endl;
+                    << endl;
 
     switch (bsm->getKind()) {
     case SEND_BEACON_EVT: {
@@ -182,30 +186,60 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
             target.x = bsm->getSenderPos().x;
             target.y = bsm->getSenderPos().y;
 
-            std::cout << "Calculando distancia entre "<< myId << " e " << BC->getIdSender() << endl;
-            if(checkNeighbor(curPosition, target)){
+            std::cout << "Calculando distancia entre " << myId << " e "
+                    << BC->getIdSender() << endl;
+            if (checkNeighbor(curPosition, target)) {
                 grafo.GRAPHinsertArc(graph, myId, BC->getIdSender());
-                vizinhosList.insert(std::pair<int, std::string>(BC->getIdSender(), posString));
+                vizinhosList.insert(
+                        std::pair<int, std::string>(BC->getIdSender(),
+                                posString));
 
+                if (!BC->getVizinhos().empty()) {
+                    std::map<int, std::string> vizinhosSenderList =
+                            BC->getVizinhos();
 
-                if(!BC->getVizinhos().empty()){
-                    std::map<int, std::string> vizinhosSenderList = BC->getVizinhos();
+                    for (itVizinhosList = vizinhosSenderList.begin();
+                            itVizinhosList != vizinhosSenderList.end();
+                            ++itVizinhosList) {
+                        grafo.GRAPHinsertArc(graph, BC->getIdSender(),
+                                itVizinhosList->first);
+                    }
+                }
+                //cancelEvent(sendBeaconEvt);
+            } else {
+                std::cout
+                << "Valor maior que o limite de vzinhança...Checando se são vizinhos"
+                << endl;
+                if (grafo.existeVizinho(graph, myId, BC->getIdSender())) {
+                    std::cout << "Positivo...Removendo relação com "
+                            << BC->getIdSender() << endl;
+                    grafo.GRAPHremoveArc(graph, myId, BC->getIdSender());
+                    vizinhosList.erase(BC->getIdSender());
 
-                    for(itVizinhosList = vizinhosSenderList.begin(); itVizinhosList != vizinhosSenderList.end(); ++itVizinhosList){
-                         grafo.GRAPHinsertArc(graph, BC->getIdSender(), itVizinhosList->first);
+                    if (!BC->getVizinhos().empty()) {
+                        std::map<int, std::string> vizinhosSenderList =
+                                BC->getVizinhos();
+
+                        for (itVizinhosList = vizinhosSenderList.begin();
+                                itVizinhosList != vizinhosSenderList.end();
+                                ++itVizinhosList) {
+                            grafo.GRAPHremoveArc(graph, BC->getIdSender(),
+                                    itVizinhosList->first);
+                        }
                     }
                 }
             }
-        } else{
-            if(BC->getDbscanExecutado()){
+            if (myId == 9) {
+                grafo.GRAPHshow(graph);
+            }
+        } else {
+            if (BC->getDbscanExecutado()) {
                 std::cout << "DBSCAN já executado. Limpando matriz..." << endl;
                 grafo.clearAdjMatrix(graph);
+                vizinhosList.clear();
             }
         }
 
-        break;
-    }case MAKE_DBSCAN_EVT: {
-        std::cout << "VAI DAR CERTO" << endl;
         break;
     }
     default: {
@@ -231,9 +265,9 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
         string velomax = std::to_string(traciVehicle->getMaxSpeed());
         string stime = simTime().str();
 
-//        std::cout << "CAR;" << ";" << "id:" << id << ";" << "tipo:" << tipo
-//                << ";" << "pista:" << pista << ";" << "Cveloact:" << veloact
-//                << ";" << "velomax:" << velomax << ";\n";
+        //        std::cout << "CAR;" << ";" << "id:" << id << ";" << "tipo:" << tipo
+        //                << ";" << "pista:" << pista << ";" << "Cveloact:" << veloact
+        //                << ";" << "velomax:" << velomax << ";\n";
 
         string QS = "car-velo;";
         QS = QS + "id:" + id + ";";

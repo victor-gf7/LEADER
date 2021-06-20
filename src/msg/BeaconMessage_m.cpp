@@ -214,6 +214,7 @@ void BeaconMessage::copy(const BeaconMessage& other)
     this->vizinhos = other.vizinhos;
     this->matrixAdj = other.matrixAdj;
     this->dbscanExecutado = other.dbscanExecutado;
+    this->lideres = other.lideres;
 }
 
 void BeaconMessage::parsimPack(omnetpp::cCommBuffer *b) const
@@ -228,6 +229,7 @@ void BeaconMessage::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b, this->vizinhos);
     doParsimPacking(b, this->matrixAdj);
     doParsimPacking(b, this->dbscanExecutado);
+    doParsimPacking(b, this->lideres);
 }
 
 void BeaconMessage::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -242,6 +244,7 @@ void BeaconMessage::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b, this->vizinhos);
     doParsimUnpacking(b, this->matrixAdj);
     doParsimUnpacking(b, this->dbscanExecutado);
+    doParsimUnpacking(b, this->lideres);
 }
 
 int BeaconMessage::getIdSender() const
@@ -330,6 +333,15 @@ void BeaconMessage::setDbscanExecutado(bool dbscanExecutado){
 bool BeaconMessage::getDbscanExecutado() const
 {
     return this->dbscanExecutado;
+}
+
+void BeaconMessage::setLideres(std::map<int, LeaderInfo> lideres){
+    this->lideres = lideres;
+}
+
+std::map<int, LeaderInfo> BeaconMessage::getLideres() const
+{
+    return this->lideres;
 }
 
 class BeaconMessageDescriptor : public omnetpp::cClassDescriptor

@@ -12,7 +12,7 @@
 #include "veins/modules/application/ieee80211p/BaseWaveApplLayer.h"
 
 #define MINIMUM_POINTS 4     // minimum number of cluster
-#define EPSILON_DBSCAN (5000.0)
+#define EPSILON_DBSCAN (50.0) //em metros
 
 
 namespace veins_manhattan {
@@ -58,6 +58,7 @@ namespace veins_manhattan {
             string posString;
             Point ponto;
             Leader leaderEngine;
+            std::map<int, LeaderInfo> leaders;
 
             vector<Point_> points;
             vector<Point_> pointsResult;

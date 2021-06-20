@@ -18,7 +18,7 @@ Leader::~Leader() {
     // TODO Auto-generated destructor stub
 }
 
-void Leader::conductElection(std::map<int, VeiculosInfo_> infos){
+std::map<int, LeaderInfo> Leader::conductElection(std::map<int, VeiculosInfo_> infos){
     std::cout << "Eleição iniciada" << endl;
 
     for(itInfos = infos.begin(); itInfos != infos.end(); ++itInfos){
@@ -65,7 +65,7 @@ void Leader::conductElection(std::map<int, VeiculosInfo_> infos){
                 << " Ego-Betweeness: "<< itLeaders->second.egoValue << endl;
     }
 
-    leaders.clear();
+    return leaders;
 
 }
 

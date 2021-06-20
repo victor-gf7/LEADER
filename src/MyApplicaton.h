@@ -16,7 +16,7 @@
 #include "Grafo.h"
 #include "EgoBetweenness.h"
 #define MINIMUM_POINTS 4     // minimum number of cluster
-#define EPSILON_DBSCAN (10000.0)  //distance for clustering, metre^2
+#define EPSILON_DBSCAN (50.0)  //distance for clustering, metre^2
 
 using namespace std;
 

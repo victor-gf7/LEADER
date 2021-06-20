@@ -1,6 +1,6 @@
 out/gcc-release//src/MyRSUApp.o: src/MyRSUApp.cpp src/MyRSUApp.h \
  /home/joao/Downloads/omnetpp-5.3/include/omnetpp.h \
- src/msg/BeaconMessage_m.h src/msg/../dbscan.h \
+ src/msg/BeaconMessage_m.h src/msg/../dbscan.h src/msg/../Leader.h \
  ../veins-veins-4.7.1/src/veins/modules/mobility/traci/TraCICommandInterface.h \
  ../veins-veins-4.7.1/src/veins/modules/mobility/traci/TraCIColor.h \
  ../veins-veins-4.7.1/src/veins/base/utils/MiXiMDefs.h \
@@ -48,6 +48,8 @@ src/MyRSUApp.h:
 src/msg/BeaconMessage_m.h:
 
 src/msg/../dbscan.h:
+
+src/msg/../Leader.h:
 
 ../veins-veins-4.7.1/src/veins/modules/mobility/traci/TraCICommandInterface.h:
 

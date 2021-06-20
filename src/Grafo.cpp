@@ -34,11 +34,16 @@ int Grafo::obterGrauDeSaida(int v)
     return adj[v].size();
 }
 
-bool Grafo::existeVizinho(int v1, int v2)
+bool Grafo::existeVizinho(Graph G, int v1, int v2)
 {
-    if(find(adj[v1].begin(), adj[v1].end(), v2) != adj[v1].end())
+    if (G->adj[v1][v2] == 1) {
         return true;
+    }
     return false;
+
+//    if(find(adj[v1].begin(), adj[v1].end(), v2) != adj[v1].end())
+//        return true;
+//    return false;
 }
 
 /* REPRESENTAÇÃO POR MATRIZ DE ADJACÊNCIAS: A função GRAPHinit() constrói um grafo com vértices 0 1 .. V-1 e nenhum arco. */

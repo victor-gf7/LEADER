@@ -31,7 +31,7 @@ public:
     // obtém o grau de saída de um dado vértice
     // grau de saída é o número de arcos que saem de "v"
     int obterGrauDeSaida(int v);
-    bool existeVizinho(int v1, int v2);
+    bool existeVizinho(Graph G, int v1, int v2);
 
     /*Nova abordagem*/
     void clearAdjMatrix(Graph G);

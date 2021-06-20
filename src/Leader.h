@@ -46,7 +46,7 @@ protected:
 public:
     Leader();
     virtual ~Leader();
-    virtual void conductElection(std::map<int, VeiculosInfo_> infos);
+    virtual std::map<int, LeaderInfo> conductElection(std::map<int, VeiculosInfo_> infos);
 };
 
 } /* namespace veins_manhattan */

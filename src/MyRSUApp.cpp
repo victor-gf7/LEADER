@@ -94,6 +94,9 @@ void MyRSUApp::handleSelfMsg(cMessage* msg) {
                 beaconMessage->setDbscanExecutado(eventoExecutado);
                 eventoExecutado = false;
             }
+            if(!leaders.empty()){
+                beaconMessage->setLideres(leaders);
+            }
             bsm->encapsulate(beaconMessage);
 
             populateWSM(bsm);
@@ -190,8 +193,9 @@ void MyRSUApp::handleSelfMsg(cMessage* msg) {
                         iDBSCAN++;
                     }
                 }
+                leaders.clear();
 
-                leaderEngine.conductElection(infos);
+                leaders = leaderEngine.conductElection(infos);
 
                 //outputFi1le << "END_MAKE_DBSCAN_EVT\n";
                 infos.clear();
