@@ -149,10 +149,9 @@ void MyApplicaton::onWSM(WaveShortMessage* wsm) {
  */
 bool MyApplicaton::checkNeighbor(Coord pointCore, Coord pointTarget) {
 
-    double distance = sqrt(
-            pow(pointCore.x - pointTarget.x, 2)
-            + pow(pointCore.y - pointTarget.y, 2)
-            + pow(pointCore.z - pointTarget.z, 2));
+    double distance = std::abs(pointCore.x - pointTarget.x)
+            + std::abs(pointCore.y - pointTarget.y)
+            + std::abs(pointCore.z - pointTarget.z);
 
     std::cout << "A distancia entre eles é: " << distance << endl;
     if (distance > 1.0 && distance <= 70.0) {
@@ -208,7 +207,7 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
                 //cancelEvent(sendBeaconEvt);
             } else {
                 std::cout
-                << "Valor maior que o limite de vzinhança...Checando se são vizinhos"
+                << "Valor maior que o limite de viznhança...Checando se são vizinhos"
                 << endl;
                 if (grafo.existeVizinho(graph, myId, BC->getIdSender())) {
                     std::cout << "Positivo...Removendo relação com "
