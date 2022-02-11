@@ -336,6 +336,7 @@ bool BeaconMessage::getDbscanExecutado() const
 }
 
 void BeaconMessage::setLideres(std::map<int, LeaderInfo> lideres){
+    this->lideres.clear();
     this->lideres = lideres;
 }
 

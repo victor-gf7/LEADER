@@ -22,7 +22,7 @@ EgoBetweenness::EgoBetweenness() {
     // each vehicle has an initial matrix of dimension equal to 30
     //AdjMatrix = (int **)malloc(30 * 30 * sizeof(int));
     //loadInitialAdjMatrix(AdjMatrix, 30);
-    this->dimensionMatrix = 30;
+    this->dimensionMatrix = 200;
     this->ego = 0;
     this->maxEgo = 0;
 }

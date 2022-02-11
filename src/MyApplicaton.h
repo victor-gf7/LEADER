@@ -16,7 +16,7 @@
 #include "Grafo.h"
 #include "EgoBetweenness.h"
 #define MINIMUM_POINTS 4     // minimum number of cluster
-#define EPSILON_DBSCAN (50.0)  //distance for clustering, metre^2
+#define EPSILON_DBSCAN (70.0)  //distance for clustering, metre^2
 
 using namespace std;
 
@@ -61,6 +61,8 @@ namespace veins_manhattan {
             Grafo grafo;
             std::map<int, std::string> vizinhosList;
             std::map<int, std::string>::iterator itVizinhosList;
+            std::map<int, LeaderInfo>::iterator itLeadersList;
+            double resumptionWindowTime;
 
 
             //WRITE FILE

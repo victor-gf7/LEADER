@@ -8,4 +8,5 @@ simple MyApplicaton extends BaseWaveApplLayer
     //declarations go here
     @class(MyApplicaton);
     @display("i=block/segm");
+    double resumptionWindowTime = default(10.0);
 }

@@ -43,6 +43,8 @@ protected:
     //int iClusters;
     int maior = INT_MIN;
     int egoCandidatoLider = 0;
+    //WRITE FILE
+    ofstream outputFile;
 public:
     Leader();
     virtual ~Leader();

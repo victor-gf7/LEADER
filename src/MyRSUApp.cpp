@@ -40,38 +40,42 @@ void MyRSUApp::onWSM(WaveShortMessage* wsm) {
  */
 void MyRSUApp::handleLowerMsg(cMessage* msg) {
 
-    BasicSafetyMessage* bsm = check_and_cast<BasicSafetyMessage*>(msg);
+//    try{
+        BasicSafetyMessage* bsm = check_and_cast<BasicSafetyMessage*>(msg);
 
-    BeaconMessage* BC = dynamic_cast<BeaconMessage*>(bsm->decapsulate());
+        BeaconMessage* BC = dynamic_cast<BeaconMessage*>(bsm->decapsulate());
 
-    posString = std::to_string(bsm->getSenderPos().x) + ";"
-            + std::to_string(bsm->getSenderPos().y) + ";"
-            + std::to_string(bsm->getSenderPos().z);
+            posString = std::to_string(bsm->getSenderPos().x) + ";"
+                    + std::to_string(bsm->getSenderPos().y) + ";"
+                    + std::to_string(bsm->getSenderPos().z);
 
-    matrizAdj.insert(BC->getMatrixAdj());
+            matrizAdj.insert(BC->getMatrixAdj());
 
-    mapDBSCAN.insert(
-            std::pair<int, std::string>(BC->getIdSender(), posString));
-    DBSCANmap.insert(
-            std::pair<std::string, int>(posString, BC->getIdSender()));
+            mapDBSCAN.insert(
+                    std::pair<int, std::string>(BC->getIdSender(), posString));
+            DBSCANmap.insert(
+                    std::pair<std::string, int>(posString, BC->getIdSender()));
 
-    if (eventoEscalonado == 0) {
-        std::cout << "Escalonamento DBSCAN realizado pelo RSU: " << myId
-                << endl;
-        eventoEscalonado = 1;
-        makeDBSCANEvt = new cMessage("Make DBSCAN Event", MAKE_DBSCAN_EVT);
-        windowTime = par("windowTime").doubleValue();
+            if (eventoEscalonado == 0) {
+                std::cout << "Escalonamento DBSCAN realizado pelo RSU: " << myId
+                        << endl;
+                eventoEscalonado = 1;
+                makeDBSCANEvt = new cMessage("Make DBSCAN Event", MAKE_DBSCAN_EVT);
+                windowTime = par("windowTime").doubleValue();
 
-        scheduleAt(simTime().dbl() + windowTime, makeDBSCANEvt);
-    }
+                scheduleAt(simTime().dbl() + windowTime, makeDBSCANEvt);
+            }
 
-    std::cerr        << "\n ------------------------------------- "
-                     << "\n [" <<  BC->getTypeDevice() << "] X [RSU] :: MENSAGEM RECEBIDA -------"
-                     << "\n -- Recebida na RSU : "<< myId
-                     << "\n -- Desencapsulando a Mensagem ----------- "
-                     << "\n    -- Envida pelo veiculo: " << BC->getIdSender()
-                     << "\n    -- Estrada : " << BC->getRoadSender()
-                     << "\n -------------------------------------\n ";
+            std::cerr        << "\n ------------------------------------- "
+                             << "\n [" <<  BC->getTypeDevice() << "] X [RSU] :: MENSAGEM RECEBIDA -------"
+                             << "\n -- Recebida na RSU : "<< myId
+                             << "\n -- Desencapsulando a Mensagem ----------- "
+                             << "\n    -- Envida pelo veiculo: " << BC->getIdSender()
+                             << "\n    -- Estrada : " << BC->getRoadSender()
+                             << "\n -------------------------------------\n ";
+//    }catch (...) {
+//
+//    }
 }
 
 
@@ -128,7 +132,7 @@ void MyRSUApp::handleSelfMsg(cMessage* msg) {
                         outputFile.open("DBSCAN_Data.txt");
                     }
                     //std::cout << "MAKE_DBSCAN_EVT \n" << simTime().dbl() << endl;
-                    //outputFile << "MAKE_DBSCAN_EVT;" << simTime().dbl();
+                    outputFile << "MAKE_DBSCAN_EVT executado. Tempo de simulação: " << simTime().dbl();
                     actualTime = simTime().dbl();
                     sizeMap = mapDBSCAN.size();
                     //SEPARAR OS PONTOS
@@ -158,7 +162,7 @@ void MyRSUApp::handleSelfMsg(cMessage* msg) {
                     //MOSTRAR RESULTADOS
                     iDBSCAN = 0;
                     std::cout << "number of points: " << ds.getTotalPointSize() << endl;
-                    //outputFile << ";" << ds.getTotalPointSize() << "\n";
+                    outputFile << ";" << ds.getTotalPointSize() << "\n";
                     pointsResult = ds.m_points;
 
                     for(itMatrizAdj = matrizAdj.begin(); itMatrizAdj != matrizAdj.end(); ++itMatrizAdj){
@@ -197,7 +201,7 @@ void MyRSUApp::handleSelfMsg(cMessage* msg) {
 
                 leaders = leaderEngine.conductElection(infos);
 
-                //outputFi1le << "END_MAKE_DBSCAN_EVT\n";
+                outputFile << "END_MAKE_DBSCAN_EVT\n\n";
                 infos.clear();
                 egosByVehicles.clear();
                 points.clear();

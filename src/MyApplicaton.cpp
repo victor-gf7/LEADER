@@ -6,10 +6,6 @@ Define_Module(MyApplicaton);
 
 void MyApplicaton::initialize(int stage) {
 
-    if (outputFile.is_open()) {
-        outputFile.close();
-    }
-
     BaseWaveApplLayer::initialize(stage);
 
     if (stage == 0) {
@@ -23,15 +19,15 @@ void MyApplicaton::initialize(int stage) {
 
         sentMessage = false;
         lastDroveAt = simTime();
-        graph = grafo.GRAPHinit(30);
+        graph = grafo.GRAPHinit(200);
 
         std::cout
-        << " \n ---------------------------------------- Código do Veículo =  "
-        << myId << endl;
+                << " \n ---------------------------------------- Código do Veículo =  "
+                << myId << endl;
 
         std::cout
-        << " \n ---------------------------------------- Edge do Veículo   =  "
-        << traciVehicle->getRouteId() << "\n" << endl;
+                << " \n ---------------------------------------- Edge do Veículo   =  "
+                << traciVehicle->getRouteId() << "\n" << endl;
 
         string str = "car-added;id:" + std::to_string(myId);
         //in.SendMessage(str);
@@ -134,13 +130,14 @@ void MyApplicaton::handleSelfMsg(cMessage* msg) {
     default: {
         if (msg)
             DBG_APP << "APP: Error: Got Self Message of unknown kind! Name: "
-            << msg->getName() << endl;
+                           << msg->getName() << endl;
         break;
     }
     }
 }
 
 void MyApplicaton::onWSM(WaveShortMessage* wsm) {
+    std::cout << "Veiculo: " << myId << "-> Recebeu uma mensagem WSM" << endl;
     std::cerr << "\n Chegou uma Wave Short Message em: onWSM";
 }
 
@@ -171,7 +168,7 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
     BeaconMessage* BC = dynamic_cast<BeaconMessage*>(bsm->decapsulate());
 
     std::cout << BC->getTypeDevice() << " que enviou " << BC->getIdSender()
-                    << endl;
+            << endl;
 
     switch (bsm->getKind()) {
     case SEND_BEACON_EVT: {
@@ -207,8 +204,8 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
                 //cancelEvent(sendBeaconEvt);
             } else {
                 std::cout
-                << "Valor maior que o limite de viznhança...Checando se são vizinhos"
-                << endl;
+                        << "Valor maior que o limite de viznhança...Checando se são vizinhos"
+                        << endl;
                 if (grafo.existeVizinho(graph, myId, BC->getIdSender())) {
                     std::cout << "Positivo...Removendo relação com "
                             << BC->getIdSender() << endl;
@@ -227,9 +224,9 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
                         }
                     }
                 }
-            }
-            if (myId == 9) {
-                grafo.GRAPHshow(graph);
+//                if (myId == 9) {
+//                    grafo.GRAPHshow(graph);
+//                }
             }
         } else {
             if (BC->getDbscanExecutado()) {
@@ -237,8 +234,21 @@ void MyApplicaton::onBSM(BasicSafetyMessage* bsm) {
                 grafo.clearAdjMatrix(graph);
                 vizinhosList.clear();
             }
+            if (!BC->getLideres().empty() && BC->getLideres().size() > 1) {
+                for (itLeadersList = BC->getLideres().begin();
+                        itLeadersList != BC->getLideres().end();
+                        ++itLeadersList) {
+                    std::cout << "Veiculo lider: " << itLeadersList->second.idVeiculo << endl;
+                    if (itLeadersList->second.idVeiculo != myId) { //valida se é um dos líderes
+                        std::cout << "Desligando o evento e beacon para o veiculo: " << myId << endl;
+                        cancelEvent(sendBeaconEvt);
+                    }
+                }
+                std::cout << "Finaliza for" << endl;
+            }
+            std::cout << "Finaliza IF" << endl;
         }
-
+        std::cout << "break beacon" << endl;
         break;
     }
     default: {

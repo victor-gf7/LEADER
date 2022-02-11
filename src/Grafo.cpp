@@ -36,9 +36,23 @@ int Grafo::obterGrauDeSaida(int v)
 
 bool Grafo::existeVizinho(Graph G, int v1, int v2)
 {
-    std::cout << "Checking..." << v1<< v2 <<endl;
-    GRAPHshow(G);
+    std::cout << "Checking..." << v1 << "->"<< v2 <<endl;
     if (G->adj[v1][v2] == 1) {
+        std::cout << "Ainda é" << endl;
+        return true;
+    }
+    std::cout << "Não é" << endl;
+    return false;
+
+//    if(find(adj[v1].begin(), adj[v1].end(), v2) != adj[v1].end())
+//        return true;
+//    return false;
+}
+
+bool Grafo::isValid(Graph G)
+{
+    std::cout << "Verificando se é válido..." <<endl;
+    if (G) {
         std::cout << "Ainda é" << endl;
         return true;
     }
